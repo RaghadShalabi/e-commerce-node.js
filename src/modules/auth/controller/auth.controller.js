@@ -26,9 +26,9 @@ export const signIn = async (req, res, next) => {
     if (!match) {
         return res.status(409).json({ message: "wrong password" });
     }
-    const token = jwt.sign({ id: user._id, role: user.role, status: user.status }, process.env.SIGNIN_SECRET_KEY,
+    const token = jwt.sign({ id: user._id, role: user.role, status: user.status }, process.env.SIGN_IN_SECRET_KEY,
         { expiresIn: '1h' })//1 hour
-    const refreshToken = jwt.sign({ id: user._id, role: user.role, status: user.status }, process.env.SIGNIN_SECRET_KEY,
+    const refreshToken = jwt.sign({ id: user._id, role: user.role, status: user.status }, process.env.SIGN_IN_SECRET_KEY,
         { expiresIn: 60 * 60 * 24 * 30 })// 1 month
     return res.status(201).json({ message: "success", token, refreshToken })
 }
