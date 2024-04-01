@@ -1,10 +1,17 @@
 import slugify from "slugify";
 import categoryModel from "../../../../DB/model/category.model.js";
 import cloudinary from "../../../services/cloudinary.js";
+import subcategoryModel from "../../../../DB/model/subcategory.model.js";
 
 export const getCategories = async (req, res, next) => {
-    const category = await categoryModel.find();
-    return res.status(201).json({ message: 'success', category })
+    const categories = await categoryModel.find().populate('subcategory');
+
+    // const categoriesList = []
+    // for (const category of categories) {
+    //     const subcategories = await subcategoryModel.find({ categoryId: category._id })
+    //     categoriesList.push({ category, subcategories })
+    // }
+    return res.status(201).json({ message: 'success', categories })
 }
 
 export const getActiveCategory = async (req, res, next) => {
@@ -44,7 +51,7 @@ export const updateCategory = async (req, res, next) => {
 
 export const getSpecificCategory = async (req, res, next) => {
     const { id } = req.params;
-    const category = await categoryModel.findById(id)
+    const category = await categoryModel.findById(id).populate('subcategory')
     return res.status(201).json({ message: "success", category })
 }
 

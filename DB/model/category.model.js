@@ -18,11 +18,19 @@ const categorySchema = new Schema({
         default: 'Active',
         enum: ['Active', 'Inactive'],
     },
-    createdBy:{type:Types.ObjectId,ref:'User'},
-    updatedBy:{type:Types.ObjectId,ref:'User'}
+    createdBy: { type: Types.ObjectId, ref: 'User' },
+    updatedBy: { type: Types.ObjectId, ref: 'User' }
 }, {
-    timestamps: true
-})
+    timestamps: true,
+    toJSON:{virtuals:true},
+    toObject:{virtuals:true}
+});
+
+categorySchema.virtual('subcategory', {
+    ref: 'Subcategory',
+    localField: '_id',
+    foreignField: 'categoryId',
+});
 
 const categoryModel = model('Category', categorySchema)
 export default categoryModel;
