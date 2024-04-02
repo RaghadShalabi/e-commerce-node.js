@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs'
 import cloudinary from "../../../services/cloudinary.js";
 import jwt from 'jsonwebtoken'
 import { sendEmail } from "../../../services/email.js";
+import { customAlphabet, nanoid } from "nanoid";
 
 export const signUp = async (req, res, next) => {
     const { userName, email, password } = req.body;
@@ -15,7 +16,7 @@ export const signUp = async (req, res, next) => {
     })
     const token = jwt.sign({ email }, process.env.CONFIRM_EMAIL_SECRET_KEY)
     await sendEmail(email, "confirm email",
-        `<a href = "http://localhost:3000/auth/confirmEmail/${token}"> verify email </a>`);
+        `<h2><a href = "${req.protocol}://${req.headers.host}/auth/confirmEmail/${token}"> verify email </a> <br> <a href = "#">to sign in click here</a></h2>`);
     const user = await userModel.create({ userName, email, password: hashPassword, image: { secure_url, public_id } });
     return res.status(201).json({ message: "success", user })
 }
@@ -48,4 +49,34 @@ export const confirmEmail = async (req, res, next) => {
         return res.status(400).json({ message: "invalid verify your email or your email is verified" })
     }
     return res.status(201).json({ message: "your email is verified" })
+}
+
+export const sendCode = async (req, res, next) => {
+    const { email } = req.body;
+    let code = customAlphabet('1234567890', 6)
+    code = code();
+    const html = `<h2>code is : ${code} <br> <a href='#'>to create new password click here</a></h2>`;
+    await sendEmail(email, "reset Password", html);
+    const user = await userModel.findOneAndUpdate({ email }, { sendCode: code }, { new: true })
+    return res.status(201).json({ message: "success", user })
+}
+
+export const forgetPassword = async (req, res, next) => {
+    const { email, newPassword, code } = req.body;
+    const user = await userModel.findOne({ email })
+    if (!user) {
+        return res.status(409).json({ message: "not registered account" })
+    }
+    if (user.sendCode != code) {
+        return res.status(409).json({ message: "invalid code" })
+    }
+    let match = bcrypt.compareSync(newPassword, user.password);
+    if (match) {
+        return res.status(409).json({ message: "same password, Please enter another password" })
+    }
+    const hashNewPassword = bcrypt.hashSync(newPassword, parseInt(process.env.SALT_ROUND))
+    user.password = hashNewPassword;
+    user.sendCode = null;
+    await user.save();
+    return res.status(201).json({ message: "success" })
 }
