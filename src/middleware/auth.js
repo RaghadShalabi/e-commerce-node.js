@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import userModel from "../../DB/model/user.model.js";
 
-export const auth = () => {
+export const auth = (accessRoles = []) => {
     return async (req, res, next) => {
         const { authorization } = req.headers;
         if (!authorization?.startsWith(process.env.BEARER_TOKEN)) {
@@ -18,9 +18,11 @@ export const auth = () => {
         if (!user) {
             return res.status(404).json({ message: "User registered not found" })
         }
-        if (user.role == 'User') {
+        if (!accessRoles.includes(user.role)) {
             return res.status(403).json({ message: "not authorization to this user" })
         }
+        req.user = user;
+
         next()
     }
 }

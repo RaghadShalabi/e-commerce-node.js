@@ -45,7 +45,7 @@ export const softDelete = async (req, res, next) => {
 
 export const hardDelete = async (req, res, next) => {
     const { id } = req.params;
-    const coupon = await couponModel.findOneAndDelete({ _id: id, });
+    const coupon = await couponModel.findOneAndDelete({ _id: id, isDeleted: true });
     if (!coupon) {
         return res.status(409).json({ message: "can't delete this coupon" })
     }
