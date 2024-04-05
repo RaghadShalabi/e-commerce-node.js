@@ -4,7 +4,7 @@ import * as categoriesController from './controller/categories.controller.js'
 import fileUpload, { fileValidation } from '../../services/multer.js'
 import subcategoriesRouter from '../subcategories/subcategories.router.js'
 import { auth } from '../../middleware/auth.js'
-import { endPoint } from './category.endpoint.js'
+import { endPoint } from './categories.endpoint.js'
 
 router.use('/:id/subcategories', subcategoriesRouter)
 router.get('/', auth(endPoint.getAll), categoriesController.getCategories);

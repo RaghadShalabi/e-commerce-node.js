@@ -1,11 +1,11 @@
 import { Router } from 'express'
 const router = Router()
 import * as productsController from './controller/products.controller.js'
-import { endPoint } from '../categories/category.endpoint.js'
 import fileUpload, { fileValidation } from '../../services/multer.js'
 import { auth } from '../../middleware/auth.js'
+import { endPoint } from './products.endpoint.js'
 
-router.get('/', productsController.getProducts)
+router.get('/', auth(endPoint.getAll), productsController.getProducts)
 router.post('/', auth(endPoint.create), fileUpload(fileValidation.image).fields([
     { name: "mainImage", maxCount: 1 },
     { name: "subImages", maxCount: 5 }

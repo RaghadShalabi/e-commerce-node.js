@@ -4,6 +4,7 @@ import subcategoriesRouter from './subcategories/subcategories.router.js'
 import productsRouter from './products/products.router.js'
 import authRouter from './auth/auth.router.js'
 import couponRouter from './coupon/coupon.router.js'
+import cartRouter from './cart/cart.router.js'
 
 const initApp = (app, express) => {
     app.use(express.json())
@@ -16,6 +17,7 @@ const initApp = (app, express) => {
     app.use('/subcategories', subcategoriesRouter)
     app.use('/products', productsRouter)
     app.use('/coupon', couponRouter)
+    app.use('/cart', cartRouter)
     app.get('*', (req, res) => {
         return res.status(500).json({ message: "Page not found 404 x_x" })
     })

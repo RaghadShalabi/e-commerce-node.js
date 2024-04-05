@@ -15,8 +15,8 @@ export const signUp = async (req, res, next) => {
         folder: `${process.env.APP_NAME}/users`
     })
     const token = jwt.sign({ email }, process.env.CONFIRM_EMAIL_SECRET_KEY)
-    await sendEmail(email, "confirm email",
-        `<h2><a href = "${req.protocol}://${req.headers.host}/auth/confirmEmail/${token}"> verify email </a> <br> <a href = "#">to sign in click here</a></h2>`);
+    const html = `<h2><a href = "${req.protocol}://${req.headers.host}/auth/confirmEmail/${token}"> verify email </a></h2>`
+    await sendEmail(email, "confirm email", html);
     const user = await userModel.create({ userName, email, password: hashPassword, image: { secure_url, public_id } });
     return res.status(201).json({ message: "success", user })
 }
