@@ -23,12 +23,12 @@ export const updateCategory = async (req, res, next) => {
     const { id } = req.params;
     const category = await categoryModel.findById(id)
     if (!category) {
-        return res.status(409).json({ message: `invalid category id ${req.params.id}` })
+        return next(new Error(`invalid category id ${req.params.id}`,{cause:409}))
     }
 
     if (req.body.name) {
         if (await categoryModel.findOne({ name: req.body.name })) {
-            return res.status(409).json({ message: `category ${req.body.name} already exits` })
+            return next(new Error(`category ${req.body.name} already exits`,{cause:409}))
         }
         category.name = req.body.name;
         category.slug = slugify(req.body.name)
@@ -62,7 +62,7 @@ export const createCategory = async (req, res, next) => {
     }
     const name = req.body.name.toLowerCase();
     if (await categoryModel.findOne({ name })) {
-        return res.status(409).json({ message: "Category name already exists" })
+        return next(new Error("Category name already exists",{cause:409}))
     }
 
     const { secure_url, public_id } = await cloudinary.uploader.upload(req.file.path, {

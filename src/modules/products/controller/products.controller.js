@@ -13,11 +13,11 @@ export const createProduct = async (req, res, next) => {
     const { name, price, discount, categoryId, subCategoryId } = req.body;
     const checkCategory = await categoryModel.findById(categoryId)
     if (!checkCategory) {
-        return res.status(404).json({ message: "category not found" })
+        return next(new Error("category not found",{cause:404}))
     }
     const checkSubCategory = await subcategoryModel.findById(subCategoryId)
     if (!checkSubCategory) {
-        return res.status(404).json({ message: "sub category not found" })
+        return next(new Error("sub category not found",{cause:404}))
     }
     req.body.slug = slugify(name)
     req.body.finalPrice = price - (price * (discount || 0) / 100)

@@ -5,11 +5,14 @@ import fileUpload, { fileValidation } from '../../services/multer.js'
 import subcategoriesRouter from '../subcategories/subcategories.router.js'
 import { auth } from '../../middleware/auth.js'
 import { endPoint } from './categories.endpoint.js'
+import { asyncHandler } from '../../middleware/errorHandling.js'
+import { validation } from '../../middleware/validation.js'
+import * as validators from './categories.validation.js'
 
 router.use('/:id/subcategories', subcategoriesRouter)
-router.get('/', auth(endPoint.getAll), categoriesController.getCategories);
-router.get('/active', auth(endPoint.getActive), categoriesController.getActiveCategory)
-router.get('/:id', auth(endPoint.specific), categoriesController.getSpecificCategory)
-router.post('/', auth(endPoint.create), fileUpload(fileValidation.image).single('image'), categoriesController.createCategory);
-router.put('/:id', auth(endPoint.update), fileUpload(fileValidation.image).single('image'), categoriesController.updateCategory);
+router.get('/', auth(endPoint.getAll), asyncHandler(categoriesController.getCategories));
+router.get('/active', auth(endPoint.getActive), asyncHandler(categoriesController.getActiveCategory))
+router.get('/:id', auth(endPoint.specific), validation(validators.getSpecificCategory), asyncHandler(categoriesController.getSpecificCategory))
+router.post('/', auth(endPoint.create), fileUpload(fileValidation.image).single('image'), validation(validators.createCategory), asyncHandler(categoriesController.createCategory));
+router.put('/:id', auth(endPoint.update), fileUpload(fileValidation.image).single('image'), asyncHandler(categoriesController.updateCategory));
 export default router;
