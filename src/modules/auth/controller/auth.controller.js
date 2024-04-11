@@ -81,11 +81,12 @@ export const forgetPassword = async (req, res, next) => {
     const hashNewPassword = bcrypt.hashSync(newPassword, parseInt(process.env.SALT_ROUND))
     user.password = hashNewPassword;
     user.sendCode = null;
+    user.changePasswordTime = Date.now();
     await user.save();
-    return res.status(201).json({ message: "success" })
+    return res.status(201).json({ message: "success" });
 }
 
 export const deleteInvalidConfirm = async (req, res, next) => {
-    const users = await userModel.deleteMany({ confirmEmail: false })
-    return res.status(200).json({ message: "success" })
+    const users = await userModel.deleteMany({ confirmEmail: false });
+    return res.status(200).json({ message: "success" });
 }

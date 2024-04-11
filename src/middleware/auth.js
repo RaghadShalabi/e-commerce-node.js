@@ -3,7 +3,8 @@ import userModel from "../../DB/model/user.model.js";
 
 export const roles = {
     Admin: 'Admin',
-    User: 'User'
+    User: 'User',
+    HR: 'HR'
 }
 
 export const auth = (accessRoles = []) => {
@@ -19,10 +20,18 @@ export const auth = (accessRoles = []) => {
             return res.status(400).json({ message: "Invalid authorization" })
         }
 
-        const user = await userModel.findById({ _id: decodedToken.id }).select("userName role")
+        const user = await userModel.findById({ _id: decodedToken.id }).select("userName role changePasswordTime")
         if (!user) {
             return res.status(404).json({ message: "User registered not found" })
         }
+
+        // console.log(decodedToken.iat)
+        // console.log(parseInt(user.changePasswordTime.getTime()/1000))  
+
+        if (parseInt(user.changePasswordTime?.getTime() / 1000) > decodedToken.iat) {
+            return next(new Error("User changed password, please login", { cause: 400 }))
+        }
+
         if (!accessRoles.includes(user.role)) {
             return res.status(403).json({ message: "not authorization to this user" })
         }
