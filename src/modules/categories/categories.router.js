@@ -10,7 +10,7 @@ import { validation } from '../../middleware/validation.js'
 import * as validators from './categories.validation.js'
 
 router.use('/:id/subcategories', subcategoriesRouter)
-router.get('/', auth(Object.values(roles)), asyncHandler(categoriesController.getCategories));
+router.get('/', asyncHandler(categoriesController.getCategories));
 router.get('/active', auth(endPoint.getActive), asyncHandler(categoriesController.getActiveCategory))
 router.get('/:id', auth(endPoint.specific), validation(validators.getSpecificCategory), asyncHandler(categoriesController.getSpecificCategory))
 router.post('/', auth(endPoint.create), fileUpload(fileValidation.image).single('image'), validation(validators.createCategory), asyncHandler(categoriesController.createCategory));

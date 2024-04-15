@@ -5,6 +5,7 @@ import productsRouter from './products/products.router.js'
 import authRouter from './auth/auth.router.js'
 import couponRouter from './coupon/coupon.router.js'
 import cartRouter from './cart/cart.router.js'
+import orderRouter from './order/order.router.js'
 import { globalErrorHandler } from '../middleware/errorHandling.js'
 import cors from 'cors'
 
@@ -21,6 +22,7 @@ const initApp = (app, express) => {
     app.use('/products', productsRouter)
     app.use('/coupon', couponRouter)
     app.use('/cart', cartRouter)
+    app.use('/order', orderRouter)
     app.get('*', (req, res) => {
         return res.status(500).json({ message: "Page not found 404 x_x" })
     })
