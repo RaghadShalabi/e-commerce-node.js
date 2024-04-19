@@ -8,11 +8,7 @@ import { asyncHandler } from "../../middleware/errorHandling.js";
 import * as validators from "./products.validation.js";
 import { validation } from "../../middleware/validation.js";
 
-router.get(
-  "/",
-  auth(endPoint.getAll),
-  asyncHandler(productsController.getProucts)
-);
+router.get("/", asyncHandler(productsController.getProducts));
 router.post(
   "/",
   auth(endPoint.create),
