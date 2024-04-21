@@ -24,7 +24,7 @@ export const createCart = async (req, res, next) => {
     cart.products.push({ productId, quantity });
   }
   await cart.save();
-  return next(new Error('cart exists', { cause: 409 }));
+  return res.status(200).json({ message: 'success', cart });
 };
 
 export const removeItem = async (req, res, next) => {

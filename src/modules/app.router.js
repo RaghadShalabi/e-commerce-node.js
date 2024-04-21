@@ -6,6 +6,7 @@ import authRouter from './auth/auth.router.js';
 import couponRouter from './coupon/coupon.router.js';
 import cartRouter from './cart/cart.router.js';
 import orderRouter from './order/order.router.js';
+import userRouter from './user/user.router.js';
 import { globalErrorHandler } from '../middleware/errorHandling.js';
 import cors from 'cors';
 
@@ -17,6 +18,7 @@ const initApp = (app, express) => {
     return res.status(200).json('Welcome...');
   });
   app.use('/auth', authRouter);
+  app.use('/user', userRouter)
   app.use('/categories', categoriesRouter);
   app.use('/subcategories', subcategoriesRouter);
   app.use('/products', productsRouter);

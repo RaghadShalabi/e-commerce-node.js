@@ -23,7 +23,6 @@ const orderSchema = new Schema(
     phoneNumber: { type: String, required: true },
     couponName: {
       type: String,
-      required: true,
     },
     paymentType: {
       type: String,

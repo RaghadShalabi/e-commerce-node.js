@@ -14,6 +14,6 @@ export const createProduct = joi
     }),
     status: joi.string().valid('Active', 'Inactive'),
     categoryId: joi.string().required(),
-    subCategoryId: joi.string().required(),
+    //subCategoryId: joi.string().required(),
   })
   .required();
