@@ -4,5 +4,5 @@ export const endPoint = {
   create: [roles.User],
   cancel: [roles.User],
   get: [roles.User],
-  changeStatus: [roles.Admin]
+  changeStatus: [roles.Admin],
 };

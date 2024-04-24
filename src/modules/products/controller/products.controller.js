@@ -30,9 +30,9 @@ export const getProducts = async (req, res, next) => {
   }
 
   mongooseQuery.select(req.query.fields?.replaceAll(",", " "));
-  const products = await mongooseQuery.sort(
-    req.query.sort?.replaceAll(",", " ")
-  );
+  const products = await mongooseQuery
+    .sort(req.query.sort?.replaceAll(",", " "))
+    .populate("review");
   const total = await productModel.estimatedDocumentCount();
   return res
     .status(201)
@@ -82,7 +82,10 @@ export const getProductWithCategory = async (req, res, next) => {
   });
   return res.status(201).json({ message: "success", products });
 };
-export const getProduct = async (req, res, next) => {
-  const product = await productModel.findById(req.params.productId);
+
+export const getProductWithReview = async (req, res, next) => {
+  const product = await productModel
+    .findById(req.params.productId)
+    .populate("review");
   return res.status(201).json({ message: "success", product });
 };

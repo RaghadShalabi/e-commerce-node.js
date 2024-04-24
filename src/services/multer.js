@@ -1,8 +1,9 @@
-import multer from 'multer';
+import multer from "multer";
 
 export const fileValidation = {
-  image: ['image/png', 'image/jpeg', 'image/webp'],
-  pdf: ['application.pdf'],
+  image: ["image/png", "image/jpeg", "image/webp"],
+  pdf: ["application.pdf"],
+  excel: ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
 };
 function fileUpload(customValidation = []) {
   const storage = multer.diskStorage({});
@@ -10,7 +11,7 @@ function fileUpload(customValidation = []) {
     if (customValidation.includes(file.mimetype)) {
       cb(null, true); // Accept the file
     } else {
-      cb('Invalid file type', false); // Reject the file
+      cb("Invalid file type", false); // Reject the file
     }
   }
   const upload = multer({ fileFilter, storage });

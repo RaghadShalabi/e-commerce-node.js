@@ -16,5 +16,9 @@ router.patch(
   auth(endPoint.cancel),
   asyncHandler(orderController.cancelOrder)
 );
-router.patch('/changeStatus/:orderId', auth(endPoint.changeStatus), asyncHandler(orderController.changeStatus))
+router.patch(
+  "/changeStatus/:orderId",
+  auth(endPoint.changeStatus),
+  asyncHandler(orderController.changeStatus)
+);
 export default router;

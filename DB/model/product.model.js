@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, Types } from 'mongoose';
+import mongoose, { Schema, model, Types } from "mongoose";
 
 const productSchema = new Schema(
   {
@@ -45,8 +45,8 @@ const productSchema = new Schema(
     },
     status: {
       type: String,
-      default: 'Active',
-      enum: ['Active', 'Inactive'],
+      default: "Active",
+      enum: ["Active", "Inactive"],
     },
     isDeleted: {
       type: Boolean,
@@ -57,31 +57,39 @@ const productSchema = new Schema(
     },
     size: {
       type: String,
-      enum: ['s', 'm', 'lg', 'xl'],
+      enum: ["s", "m", "lg", "xl"],
     },
     categoryId: {
       type: Types.ObjectId,
-      ref: 'Category',
+      ref: "Category",
       required: true,
     },
     subCategoryId: {
       type: Types.ObjectId,
-      ref: 'subCategory',
+      ref: "subCategory",
       required: true,
     },
     createdBy: {
       type: Types.ObjectId,
-      ref: 'User',
+      ref: "User",
     },
     updatedBy: {
       type: Types.ObjectId,
-      ref: 'User',
+      ref: "User",
     },
   },
   {
     timestamps: true,
-  },
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
 
-const productModel = model('Product', productSchema);
+productSchema.virtual("review", {
+  ref: "Review",
+  localField: "_id",
+  foreignField: "productId",
+});
+
+const productModel = model("Product", productSchema);
 export default productModel;
