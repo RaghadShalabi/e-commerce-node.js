@@ -11,16 +11,10 @@ import reviewRouter from "../review/review.router.js";
 
 router.use("/:productId/review", reviewRouter);
 router.get("/", asyncHandler(productsController.getProducts));
-router.post(
-  "/",
-  auth(endPoint.create),
-  fileUpload(fileValidation.image).fields([
+router.post("/",auth(endPoint.create),fileUpload(fileValidation.image).fields([
     { name: "mainImage", maxCount: 1 },
     { name: "subImages", maxCount: 5 },
-  ]),
-  validation(validators.createProduct),
-  asyncHandler(productsController.createProduct)
-);
+  ]),validation(validators.createProduct),asyncHandler(productsController.createProduct));
 router.get(
   "/category/:categoryId",
   asyncHandler(productsController.getProductWithCategory)

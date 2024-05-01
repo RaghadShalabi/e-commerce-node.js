@@ -6,16 +6,7 @@ import { asyncHandler } from "../../middleware/errorHandling.js";
 import { endPoint } from "./user.endpoint.js";
 import fileUpload, { fileValidation } from "../../services/multer.js";
 
-router.get(
-  "/profile",
-  auth(Object.values(roles)),
-  asyncHandler(userController.getProfile)
-);
-router.post(
-  "/uploadUserExcel",
-  auth(endPoint.uploadUerExcel),
-  fileUpload(fileValidation.excel).single("excel"),
-  asyncHandler(userController.uploadUserExcel)
-);
+router.get("/profile",auth(Object.values(roles)),asyncHandler(userController.getProfile));
+router.post("/uploadUserExcel",auth(endPoint.uploadUerExcel),fileUpload(fileValidation.excel).single("excel"),asyncHandler(userController.uploadUserExcel));
 router.get("/users", asyncHandler(userController.getUsers));
 export default router;
